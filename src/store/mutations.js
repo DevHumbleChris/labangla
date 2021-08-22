@@ -26,7 +26,7 @@ export default {
       if (state.images) {
         state.images.map(image => {
           setTimeout(() => {
-            axios.delete('http://127.0.0.1:3000/delete-image/' + image.id)
+            axios.delete('https://labangla-api.herokuapp.com/delete-image/' + image.id)
           }, 1500)
         })
       }

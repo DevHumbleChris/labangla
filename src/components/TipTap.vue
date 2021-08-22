@@ -159,7 +159,7 @@ export default {
         const formData = new FormData()
         formData.append('file', file)
 
-        const responseData = await axios.post('http://127.0.0.1:3000/upload-image', formData, {
+        const responseData = await axios.post('https://labangla-api.herokuapp.com/upload-image', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -172,7 +172,7 @@ export default {
           })
           this.SET_IMAGES(this.uploadedImages)
           this.editor.chain().focus().setImage({
-            src: 'http://127.0.0.1:3000/image/' + responseData.data.file.filename
+            src: 'https://labangla-api.herokuapp.com/image/' + responseData.data.file.filename
           }).run()
         }
       } catch (err) {

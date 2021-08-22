@@ -49,7 +49,7 @@ export default {
     async yesPublish () {
       this.SHOW_MODAL()
       const responseData = await axios.post(
-        'http://localhost:3000/post-content',
+        'https://labangla-api.herokuapp.com/post-content',
         this.editContent
       )
       const { _id } = responseData.data.results

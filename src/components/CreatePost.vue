@@ -102,7 +102,7 @@
                     </form>
                     <div v-else>
                       <div class="rounded-2xl max-w-xs">
-                        <img :src="`http://127.0.0.1:3000/image/${postContent.coverImage.filename}`" :alt="postContent.coverImage.filename" />
+                        <img :src="`https://labangla-api.herokuapp.com/image/${postContent.coverImage.filename}`" :alt="postContent.coverImage.filename" />
                       </div>
                       <button @click="removeImage(postContent.coverImage.id)" class="bg-pink-500 my-2 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
                         <div v-if="removeLoad" class="flex">
@@ -132,7 +132,7 @@
               </div>
               <div v-bind:class="{'hidden': openTab !== 2, 'block': openTab === 2}">
                 <div v-if="postContent.coverImage.filename && postContent.coverImage.id" class="bg-gray-400 rounded-2xl">
-                  <img :src="`http://127.0.0.1:3000/image/${postContent.coverImage.filename}`" :alt="postContent.coverImage.filename" class="rounded-2xl object-contain" />
+                  <img :src="`https://labangla-api.herokuapp.com/image/${postContent.coverImage.filename}`" :alt="postContent.coverImage.filename" class="rounded-2xl object-contain" />
                 </div>
                 <div v-if="load" class="flex flex-wrap">
                   <hollow-dots-spinner
@@ -302,7 +302,7 @@ export default {
 
         formData.append('file', file)
         const responseData = await axios.post(
-          'http://127.0.0.1:3000/upload-image',
+          'https://labangla-api.herokuapp.com/upload-image',
           formData,
           {
             headers: {
@@ -325,7 +325,7 @@ export default {
       }
     },
     async removeImage (id) {
-      const responseData = await axios.delete(`http://127.0.0.1:3000/delete-image/${id}`)
+      const responseData = await axios.delete(`https://labangla-api.herokuapp.com/delete-image/${id}`)
 
       if (responseData.data.message) {
         this.removeLoad = true

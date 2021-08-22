@@ -18,7 +18,7 @@
           <font-awesome-icon :icon="['fas', 'heart']" class="iconRemarks" />
           <span class="mx-2">8</span>
         </div>
-        <div class="mx-2" @click="shareViaWebShare">
+        <div class="mx-2">
           <font-awesome-icon :icon="['fas', 'share']" class="iconRemarks" />
           <span class="mx-1">8</span>
         </div>
@@ -31,18 +31,39 @@
         {{ post.content }}
       </div>
     </div>
-    <!--<div class="max-w-sm bg-custom text-white p-3 rounded-2xl my-2">
-      <div>
-        <div>
-          Trending Posts Love
-        </div>
-        <div>
-        </div>
-      </div>
-      <div >
-      </div>
-    </div> -->
     <div>
+      <div class="m-3 overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
+        <div class="relative w-auto my-6 mx-auto max-w-sm">
+          <!--content-->
+          <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none bg-custom">
+            <!--body-->
+            <div class="relative p-6 flex-auto max-w-sm">
+              <div class="my-4 text-blueGray-500 text-lg leading-relaxed">
+                <div class="font-bold">
+                  Share
+                </div>
+                <div class="">
+                </div>
+                <hr class="">
+                <div class="">
+                  <div class="font-bold">
+                    Link
+                  </div>
+                  <div class="">
+                    <label>
+                      <input type="text" class="p-1 my-2 px-2 bg-gray-100 rounded-2xl outline-none cursor-none" />
+                      <span class="p-2 bg-gray-200 rounded">
+                        <font-awesome-icon :icon="['fas', 'copy']"/>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="opacity-25 fixed inset-0 z-40 bg-black"></div>
     </div>
   </article>
 </template>
@@ -66,9 +87,17 @@ export default {
   },
   async mounted () {
     const responseData = await axios.get(this.baseURL + '/blog-content/' + this.$route.params.id)
-    this.post = responseData.data.results
-    const postsData = await axios.get(this.baseURL + '/all-posts/')
-    this.allPosts = postsData.data.posts
+    // 612246d8ef74a30f7403f8ec
+    if (!responseData.data.results) {
+      this.$router.push({
+        params: '0',
+        name: 'Error404'
+      })
+    } else {
+      this.post = responseData.data.results
+      const postsData = await axios.get(this.baseURL + '/all-posts/')
+      this.allPosts = postsData.data.posts
+    }
   }
 }
 </script>

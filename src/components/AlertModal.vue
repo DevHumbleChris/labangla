@@ -35,7 +35,8 @@ export default {
   computed: {
     ...mapState([
       'showModal',
-      'editContent'
+      'editContent',
+      'baseURL'
     ])
   },
   methods: {
@@ -49,7 +50,7 @@ export default {
     async yesPublish () {
       this.SHOW_MODAL()
       const responseData = await axios.post(
-        'https://labangla-api.herokuapp.com/post-content',
+        this.baseURL + '/post-content',
         this.editContent
       )
       const { _id } = responseData.data.results

@@ -1,7 +1,7 @@
 <template>
   <article class="post-wrapper my-2 flex flex-wrap flex-shrink-0 justify-center">
     <div v-if="post" class="post max-w-xl bg-custom text-white p-3 rounded-3xl mx-2">
-      <img :src="`https://labangla-api.herokuapp.com/image/${post.coverImage.filename}`" />
+      <img :src="`${baseURL}/image/${post.coverImage.filename}`" />
       <div class="font-extrabold text-2xl text-center">
         {{ post.title }}
       </div>
@@ -49,6 +49,7 @@
 
 <script>
 import axios from 'axios'
+import { mapState } from 'vuex'
 
 export default {
   name: 'PublishedContent',
@@ -59,20 +60,15 @@ export default {
     }
   },
   computed: {
-    webShareSupported () {
-      return navigator.share
-    }
+    ...mapState([
+      'baseURL'
+    ])
   },
   async mounted () {
-    const responseData = await axios.get('https://labangla-api.herokuapp.com/blog-content/' + this.$route.params.id)
+    const responseData = await axios.get(this.baseURL + '/blog-content/' + this.$route.params.id)
     this.post = responseData.data.results
-    const postsData = await axios.get('https://labangla-api.herokuapp.com/all-posts/')
+    const postsData = await axios.get(this.baseURL + '/all-posts/')
     this.allPosts = postsData.data.posts
-  },
-  methods: {
-    shareViaWebShare () {
-      console.log(navigator.canShare)
-    }
   }
 }
 </script>

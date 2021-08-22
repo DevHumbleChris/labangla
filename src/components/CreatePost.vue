@@ -62,7 +62,7 @@
         <ul class="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row">
           <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
             <a class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal" v-on:click="toggleTabs(1)" v-bind:class="{'text-pink-600 bg-white': openTab !== 1, 'text-white bg-pink-600': openTab === 1}">
-              <font-awesome-icon :icon="['fas', 'pen']" class="fas fa-space-shuttle text-base mr-1" />
+              <font-awesome-icon :icon="['fas', 'pen']" class="text-base mr-1" />
               Edit
             </a>
           </li>
@@ -79,7 +79,7 @@
             </a>
           </li>
         </ul>
-        <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+        <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded mr-2">
           <div class="px-4 py-5 flex-auto">
             <div class="tab-content tab-space">
               <div v-bind:class="{'hidden': openTab !== 1, 'block': openTab === 1}">
@@ -102,7 +102,7 @@
                     </form>
                     <div v-else>
                       <div class="rounded-2xl max-w-xs">
-                        <img :src="`https://labangla-api.herokuapp.com/image/${postContent.coverImage.filename}`" :alt="postContent.coverImage.filename" />
+                        <img :src="`${baseURL}/image/${postContent.coverImage.filename}`" :alt="postContent.coverImage.filename" />
                       </div>
                       <button @click="removeImage(postContent.coverImage.id)" class="bg-pink-500 my-2 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
                         <div v-if="removeLoad" class="flex">
@@ -132,7 +132,7 @@
               </div>
               <div v-bind:class="{'hidden': openTab !== 2, 'block': openTab === 2}">
                 <div v-if="postContent.coverImage.filename && postContent.coverImage.id" class="bg-gray-400 rounded-2xl">
-                  <img :src="`https://labangla-api.herokuapp.com/image/${postContent.coverImage.filename}`" :alt="postContent.coverImage.filename" class="rounded-2xl object-contain" />
+                  <img :src="`${baseURL}/image/${postContent.coverImage.filename}`" :alt="postContent.coverImage.filename" class="rounded-2xl object-contain" />
                 </div>
                 <div v-if="load" class="flex flex-wrap">
                   <hollow-dots-spinner
@@ -262,7 +262,8 @@ export default {
   computed: {
     ...mapState([
       'editContent',
-      'save'
+      'save',
+      'baseURL'
     ]),
     tags () {
       const tags = this.postContent.tags.split(' ')
@@ -302,7 +303,7 @@ export default {
 
         formData.append('file', file)
         const responseData = await axios.post(
-          'https://labangla-api.herokuapp.com/upload-image',
+          this.baseURL + '/upload-image',
           formData,
           {
             headers: {
@@ -325,7 +326,7 @@ export default {
       }
     },
     async removeImage (id) {
-      const responseData = await axios.delete(`https://labangla-api.herokuapp.com/delete-image/${id}`)
+      const responseData = await axios.delete(`${this.baseURL}/delete-image/${id}`)
 
       if (responseData.data.message) {
         this.removeLoad = true

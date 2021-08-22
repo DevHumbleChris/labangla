@@ -2,6 +2,8 @@ const content = localStorage.getItem('editContent')
 let editContent
 const showModal = false
 const save = false
+const baseURL = 'http://localhost:3000'
+// https://labangla-api.herokuapp.com
 
 if (content) {
   editContent = JSON.parse(content)
@@ -26,5 +28,6 @@ export default {
   load,
   images,
   showModal,
-  save
+  save,
+  baseURL
 }

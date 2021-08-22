@@ -84,7 +84,7 @@ import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
 import Image from '@tiptap/extension-image'
 import Dropcursor from '@tiptap/extension-dropcursor'
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'TipTap',
@@ -115,6 +115,11 @@ export default {
       }
       this.editor.commands.setContent(this.value, false)
     }
+  },
+  computed: {
+    ...mapState([
+      'baseURL'
+    ])
   },
   mounted () {
     this.editor = new Editor({
@@ -159,7 +164,7 @@ export default {
         const formData = new FormData()
         formData.append('file', file)
 
-        const responseData = await axios.post('https://labangla-api.herokuapp.com/upload-image', formData, {
+        const responseData = await axios.post(this.baseURL + '/upload-image', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -172,7 +177,7 @@ export default {
           })
           this.SET_IMAGES(this.uploadedImages)
           this.editor.chain().focus().setImage({
-            src: 'https://labangla-api.herokuapp.com/image/' + responseData.data.file.filename
+            src: this.baseURL + '/image/' + responseData.data.file.filename
           }).run()
         }
       } catch (err) {

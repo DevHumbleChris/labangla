@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #fcedb1;
+  font-family: 'Dosis';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+  h1 {
+    @apply text-3xl;
+  }
+  h2 {
+    @apply text-2xl;
+  }
+  h3 {
+    @apply text-xl;
+  }
+  ol, ul {
+    @apply list-outside;
+  }
+  ul {
+    @apply list-disc;
+  }
+  ol {
+    @apply list-decimal;
+  }
+  /* code {
+    background-color: rgba(#616161, 0.1);
+    color: #616161;
+  } */
+  pre {
+    background: #0D0D0D;
+    color: #FFF;
+    font-family: 'JetBrainsMono', monospace;
+    @apply text-sm;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+
+    code {
+      color: inherit;
+      padding: 0;
+      background: rgba(#616161, 0.1);
+      font-size: 0.8rem;
+    }
+  }
+  blockquote {
+    padding-left: 1rem;
+    border-left: 2px solid #9f9f9f;
+    @apply my-2;
+  }
+
+  hr {
+    border: none;
+    border-top: 2px solid #9f9f9f;
+    margin: 2rem 0;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.1;
+  }
+  pre, p, blockquote, code {
+    @apply my-3;
+  }
+  img {
+    @apply bg-gray-400;
+    @apply rounded-2xl;
+    @apply my-2;
+    padding: 3px;
+  }
+}

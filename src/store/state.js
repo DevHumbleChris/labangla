@@ -15,7 +15,8 @@ if (content) {
     },
     title: '',
     content: '',
-    author: ''
+    author: '',
+    timeRead: 0
   }
 }
 

@@ -1,6 +1,6 @@
 <template>
   <article class="post-wrapper my-2 flex flex-wrap flex-shrink-0 justify-center">
-    <div v-if="post" class="post max-w-xl bg-custom text-white p-3 rounded-3xl mx-2">
+    <div v-if="post" class="post max-w-xl bg-white text-gray-600 font-bold p-3 rounded-3xl mx-2">
       <img :src="`${baseURL}/image/${post.coverImage.filename}`" />
       <div class="font-extrabold text-2xl text-center">
         {{ post.title }}
@@ -9,7 +9,8 @@
         <font-awesome-icon :icon="['fab', 'the-red-yeti']" class="w-12 h-12 rounded-full text-5xl my-2"/>
         <div class="mx-2 p-2">
           <div class="font-semibold">
-           Christopher Odhiambo
+            <span class="font-extrabold text-xl">@</span>
+            {{ post.author }}
           </div>
           <div class="flex">
             <div class="mr-2">
@@ -36,7 +37,7 @@
           </span>
         </div>
         <div class="bg-white p-2 rounded my-2 flex flex-shrink-0 flex-wrap">
-          <img src="../assets/logo.png" class="w-12 h-12 rounded-full"/>
+          <font-awesome-icon :icon="['fab', 'the-red-yeti']" class="w-12 h-12 rounded-full text-5xl my-2"/>
           <div class="mx-4">
             <input type="text" placeholder="your name" class="px-2 py-2 placeholder-blueGray-300 text-black relative bg-white bg-white rounded text-sm border-2 shadow outline-none focus:outline-none focus:ring w-full" v-model="userComment.name"/>
             <TipTap class="text-black" v-model="userComment.content"/>
@@ -51,7 +52,8 @@
               <font-awesome-icon :icon="['fab', 'the-red-yeti']" class="w-12 h-12 rounded-full text-5xl my-2"/>
               <div class="mx-2 p-2">
                 <div class="font-semibold">
-                {{comment.name}}
+                  <span class="font-extrabold text-xl">@</span>
+                  {{comment.name}}
                 </div>
                 <div class="">
                   8 hrs Ago
@@ -65,12 +67,24 @@
         </div>
       </div>
     </div>
-    <div v-if="allPosts" class="latestPosts bg-custom p-3 mx-3 max-w-md rounded-xl text-white my-2">
+    <div v-if="allPosts" class="latestPosts bg-white text-gray-600 font-bold p-3 mx-3 max-w-md rounded-xl text-white my-2">
       <div class="font-extrabold text-xl mb-2">Lastest Posts</div>
-      <div v-for="(post, index) in allPosts" :key="index" class="p-2 rounded-xl cursor-pointer hover:bg-pink-600 hover:text-white">
-        {{post.title}}
-        <div class="p-2">
-          By Christopher
+      <div v-for="(post, index) in allPosts" :key="index" >
+        <div @click="getPost(post._id)" v-if="post._id !== $route.params.id" class="p-2 rounded-xl cursor-pointer hover:bg-pink-600 hover:text-white">
+          {{post.title}}
+          <div class="p-2">
+            <span class="font-extrabold text-xl">@</span>
+            {{ post.author }}
+          </div>
+        </div>
+        <div v-else class="text-center">
+          <div class="text-3xl text-pink-600">No Latest Post</div>
+          <p class="my-2">
+            Create yours instantly,
+            <router-link to="/new-post" class="text-pink-600">
+              click here.
+            </router-link>
+          </p>
         </div>
       </div>
     </div>
@@ -110,13 +124,6 @@
                   :title="`${post.title}`"
                 >
                   <font-awesome-icon :icon="['fab', 'whatsapp']" class="rounded-full p-2 bg-pink-600 text-white m-3 text-4xl" />
-                </ShareNetwork>
-                <ShareNetwork
-                  network="instagram"
-                  :url="articeLink"
-                  :title="`${post.title}`"
-                >
-                  <font-awesome-icon :icon="['fab', 'instagram']" class="rounded-full p-2 bg-pink-600 text-white m-3 text-4xl" />
                 </ShareNetwork>
                 <ShareNetwork
                   network="telegram"
@@ -215,15 +222,7 @@ export default {
       const postsData = await axios.get(this.baseURL + '/all-posts/')
       this.allPosts = postsData.data.posts
     }
-    const commentsData = await axios.post(
-      `${this.baseURL}/post-comments`,
-      {
-        postID: this.post._id,
-        name: this.userComment.name,
-        content: this.userComment.content
-      }
-    )
-    this.comments = commentsData.data.results.comments
+    this.getComments()
   },
   methods: {
     copy () {
@@ -241,7 +240,7 @@ export default {
     },
     async isComment () {
       try {
-        const responseData = await axios.post(
+        const { message } = await axios.post(
           `${this.baseURL}/post-comments`,
           {
             postID: this.post._id,
@@ -249,9 +248,9 @@ export default {
             content: this.userComment.content
           }
         )
-        const results = responseData.data.results.comments
-        const newComment = results[results.length - 1]
-        this.comments.push(newComment)
+        if (message) {
+          this.getComments()
+        }
         this.userComment = {
           content: '',
           name: ''
@@ -259,6 +258,23 @@ export default {
       } catch (err) {
         console.log(err.message)
       }
+    },
+    async getComments () {
+      const commentsData = await axios.get(
+        `${this.baseURL}/get-comments/${this.post._id}`
+      )
+
+      if (commentsData.data.results) {
+        this.comments = commentsData.data.results.comments
+      }
+    },
+    getPost (id) {
+      this.$router.push({
+        name: 'Post',
+        params: {
+          id
+        }
+      })
     }
   }
 }

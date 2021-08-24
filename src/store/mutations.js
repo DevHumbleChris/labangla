@@ -44,8 +44,8 @@ export default {
       },
       title: '',
       content: '',
-      tagColors: ['green', 'blue', 'purple', 'pink', 'indigo', 'red'],
-      tags: ''
+      author: '',
+      timeRead: 0
     }
   }
 }

@@ -15,8 +15,7 @@ if (content) {
     },
     title: '',
     content: '',
-    tagColors: ['green', 'blue', 'purple', 'pink', 'indigo', 'red'],
-    tags: ''
+    author: ''
   }
 }
 

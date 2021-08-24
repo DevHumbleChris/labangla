@@ -125,7 +125,7 @@
                     <input type="text" v-model="postContent.title" class="title text-5xl outline-none focus:outline-none" placeholder="New post title here..." />
                   </div>
                   <div class="my-6">
-                    <input type="text" v-model="postContent.tags" class="tags text-lg outline-none focus:outline-none" placeholder="add up to 4 tags..." />
+                    <input type="text" v-model="postContent.author" class="tags text-lg outline-none focus:outline-none" placeholder="enter your name" />
                   </div>
                   <TipTap v-model="newContent" />
                 </div>
@@ -155,10 +155,29 @@
                 <div v-if="postContent.title" class="text-3xl font-bold text-center my-3">
                   {{ postContent.title }}
                 </div>
-                <div v-if="postContent.tags" class="flex flex-wrap">
-                  <router-link to="#" v-for="(tag, index) in tags" :key="index" :class="`bg-${postContent.tagColors[Math.floor(Math.random() * postContent.tagColors.length)]}-700 mr-2 p-2 rounded text-white mt-2`">
-                    #{{ tag }}
-                  </router-link>
+                <div v-if="postContent.author" class="p-2 flex flex-shrink-0">
+                  <font-awesome-icon :icon="['fab', 'the-red-yeti']" class="w-12 h-12 rounded-full text-5xl my-2"/>
+                  <div class="p-2">
+                    <div class="font-semibold">
+                      <span class="font-extrabold text-xl">@</span>
+                      {{ postContent.author }}
+                    </div>
+                    <div class="flex">
+                      <div class="mr-2">
+                        8 hrs Ago
+                      </div>
+                      <div class="mr-2">
+                        <span>
+                          {{ postContent.timeRead }}
+                        </span>
+                        min read
+                      </div>
+                      <div class="mr-2 cursor-pointer">
+                        <font-awesome-icon :icon="['fas', 'share']" class="iconRemarks text-xl" />
+                        <span class="mx-1">Share</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div v-if="postContent.content" v-html="postContent.content" class="p-5">
                   {{ postContent.content }}
@@ -230,9 +249,9 @@ export default {
           id: ''
         },
         title: '',
-        tags: '',
-        tagColors: ['green', 'blue', 'purple', 'pink', 'indigo', 'red'],
-        content: ''
+        author: '',
+        content: '',
+        timeRead: 0
       },
       showModal: false,
       revertChangesModal: false
@@ -245,8 +264,8 @@ export default {
         this.SET_CONTENT(this.postContent)
       }
     },
-    tags () {
-      if (this.postContent.tags) {
+    author () {
+      if (this.postContent.author) {
         this.SET_CONTENT(this.postContent)
       }
     },
@@ -265,9 +284,9 @@ export default {
       'save',
       'baseURL'
     ]),
-    tags () {
-      const tags = this.postContent.tags.split(' ')
-      return tags.filter(tag => tag !== '')
+    author () {
+      const author = this.postContent.author
+      return author
     },
     titleWatcher () {
       const title = this.postContent.title
@@ -342,7 +361,7 @@ export default {
     revertChanges () {
       this.newContent = ''
       this.postContent.title = ''
-      this.postContent.tags = ''
+      this.postContent.author = ''
       this.postContent.content = ''
 
       if (this.postContent.coverImage.id) {

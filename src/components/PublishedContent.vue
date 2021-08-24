@@ -5,16 +5,24 @@
       <div class="font-extrabold text-2xl text-center">
         {{ post.title }}
       </div>
-      <div class="flex justify-center">
-        <div class="mx-2">
-          6hrs Ago
-        </div>
-        <div class="mx-2">
-          8 min read
-        </div>
-        <div class="mx-2 cursor-pointer" @click="isShare">
-          <font-awesome-icon :icon="['fas', 'share']" class="iconRemarks text-xl" />
-          <span class="mx-1">Share</span>
+      <div class="p-2 flex flex-shrink-0">
+        <font-awesome-icon :icon="['fab', 'the-red-yeti']" class="w-12 h-12 rounded-full text-5xl my-2"/>
+        <div class="mx-2 p-2">
+          <div class="font-semibold">
+           Christopher Odhiambo
+          </div>
+          <div class="flex">
+            <div class="mr-2">
+              8 hrs Ago
+            </div>
+            <div class="mr-2">
+              8 min read
+            </div>
+            <div class="mr-2 cursor-pointer" @click="isShare">
+              <font-awesome-icon :icon="['fas', 'share']" class="iconRemarks text-xl" />
+              <span class="mx-1">Share</span>
+            </div>
+          </div>
         </div>
       </div>
       <div v-html="post.content" class="p-3">
@@ -207,6 +215,15 @@ export default {
       const postsData = await axios.get(this.baseURL + '/all-posts/')
       this.allPosts = postsData.data.posts
     }
+    const commentsData = await axios.post(
+      `${this.baseURL}/post-comments`,
+      {
+        postID: this.post._id,
+        name: this.userComment.name,
+        content: this.userComment.content
+      }
+    )
+    this.comments = commentsData.data.results.comments
   },
   methods: {
     copy () {
@@ -222,11 +239,25 @@ export default {
     isShare () {
       this.share = !this.share
     },
-    isComment () {
-      this.comments.push(this.userComment)
-      this.userComment = {
-        content: '',
-        name: ''
+    async isComment () {
+      try {
+        const responseData = await axios.post(
+          `${this.baseURL}/post-comments`,
+          {
+            postID: this.post._id,
+            name: this.userComment.name,
+            content: this.userComment.content
+          }
+        )
+        const results = responseData.data.results.comments
+        const newComment = results[results.length - 1]
+        this.comments.push(newComment)
+        this.userComment = {
+          content: '',
+          name: ''
+        }
+      } catch (err) {
+        console.log(err.message)
       }
     }
   }

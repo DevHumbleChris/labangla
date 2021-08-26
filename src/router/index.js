@@ -4,6 +4,7 @@ import Homepage from '@/views/Homepage.vue'
 import NewPost from '@/views/NewPost.vue'
 import Post from '@/views/Post.vue'
 import Error404 from '@/views/Error.vue'
+import Feeds from '@/views/Feeds.vue'
 
 Vue.use(VueRouter)
 
@@ -22,6 +23,11 @@ const routes = [
     path: '/post/:id',
     name: 'Post',
     component: Post
+  },
+  {
+    path: '/feeds',
+    name: 'Feeds',
+    component: Feeds
   },
   {
     path: '*',

@@ -8,6 +8,8 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import VueSocialSharing from 'vue-social-sharing'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 import './index.css'
 
 library.add(far, fas, fab)
@@ -20,5 +22,8 @@ Vue.config.productionTip = false
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  mounted () {
+    AOS.init()
+  }
 }).$mount('#app')

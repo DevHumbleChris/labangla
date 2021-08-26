@@ -98,6 +98,7 @@
                           Add Cover Image
                         </label>
                         <input id="coverImage" type="file" ref="file" hidden @change="OnFileChange"/>
+                        <span v-if="error === 0" class="block mt-3 text-sm text-red-600">* {{ requiredError[error] }}</span>
                       </div>
                     </form>
                     <div v-else>
@@ -123,11 +124,14 @@
                   </div>
                   <div class="my-6">
                     <input type="text" v-model="postContent.title" class="title text-5xl outline-none focus:outline-none" placeholder="New post title here..." />
+                    <span v-if="error === 1" class="block text-sm text-red-600">* {{ requiredError[error] }}</span>
                   </div>
-                  <div class="my-6">
+                  <div class="my-2">
                     <input type="text" v-model="postContent.author" class="tags text-lg outline-none focus:outline-none" placeholder="enter your name" />
+                    <span v-if="error === 2" class="block text-sm text-red-600">* {{ requiredError[error] }}</span>
                   </div>
-                  <TipTap v-model="newContent" />
+                  <TipTap v-model="newContent" class="focus:border-red-500" />
+                  <span v-if="error === 3" class="block text-sm text-red-600">* {{ requiredError[error] }}</span>
                 </div>
               </div>
               <div v-bind:class="{'hidden': openTab !== 2, 'block': openTab === 2}">
@@ -164,11 +168,11 @@
                     </div>
                     <div class="flex">
                       <div class="mr-2">
-                        8 hrs Ago
+                        {{ getTimeCreated() }}
                       </div>
                       <div class="mr-2">
                         <span>
-                          {{ postContent.timeRead }}
+                          {{ getTimeRead }}
                         </span>
                         min read
                       </div>
@@ -228,6 +232,7 @@ import TipTap from '@/components/TipTap.vue'
 import { HollowDotsSpinner } from 'epic-spinners'
 import axios from 'axios'
 import { mapState, mapMutations } from 'vuex'
+import { formatDistanceToNow } from 'date-fns'
 import AlertModal from '@/components/AlertModal.vue'
 
 export default {
@@ -250,11 +255,17 @@ export default {
         },
         title: '',
         author: '',
-        content: '',
-        timeRead: 0
+        content: ''
       },
       showModal: false,
-      revertChangesModal: false
+      revertChangesModal: false,
+      requiredError: [
+        'Cover Image Required',
+        'Title Required',
+        'Author Name Required',
+        'Content Required'
+      ],
+      error: null
     }
   },
   watch: {
@@ -263,6 +274,7 @@ export default {
         this.postContent.content = this.newContent
         this.SET_CONTENT(this.postContent)
       }
+      this.getTimeCreated()
     },
     author () {
       if (this.postContent.author) {
@@ -295,6 +307,13 @@ export default {
     coverImageWatcher () {
       const coverImage = this.postContent.coverImage
       return coverImage
+    },
+    getTimeRead () {
+      let timeRead = Math.floor(this.postContent.content.length / 267)
+      if (timeRead === 0) {
+        timeRead = 1
+      }
+      return timeRead
     }
   },
   methods: {
@@ -303,6 +322,13 @@ export default {
       'SET_CONTENT',
       'SHOW_MODAL'
     ]),
+    getTimeCreated () {
+      const time = Date.now()
+      const timeCreated = formatDistanceToNow(new Date(time), {
+        includeSeconds: true
+      })
+      return timeCreated
+    },
     toggleTabs (tabNumber) {
       this.openTab = tabNumber
     },
@@ -338,7 +364,7 @@ export default {
               id: responseData.data.file.id
             }
             this.load = false
-          }, 6000)
+          }, 2500)
         }
       } catch (err) {
         alert(err.message)
@@ -371,7 +397,23 @@ export default {
       localStorage.removeItem('editContent')
     },
     publish () {
-      this.SHOW_MODAL()
+      if (!this.postContent.coverImage.filename) {
+        this.toggleError(0)
+      } else if (!this.postContent.content) {
+        this.toggleError(3)
+      } else if (!this.postContent.author) {
+        this.toggleError(2)
+      } else if (!this.postContent.title) {
+        this.toggleError(1)
+      } else {
+        this.SHOW_MODAL()
+      }
+    },
+    toggleError (errorNo) {
+      this.error = errorNo
+      setTimeout(() => {
+        this.error = -1
+      }, 2000)
     }
   },
   mounted () {

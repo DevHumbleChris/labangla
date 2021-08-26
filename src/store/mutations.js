@@ -44,8 +44,7 @@ export default {
       },
       title: '',
       content: '',
-      author: '',
-      timeRead: 0
+      author: ''
     }
   }
 }

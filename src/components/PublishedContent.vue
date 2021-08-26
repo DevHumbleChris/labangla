@@ -14,10 +14,10 @@
           </div>
           <div class="flex">
             <div class="mr-2">
-              8 hrs Ago
+              {{ getDateCreated }} ago
             </div>
             <div class="mr-2">
-              8 min read
+              {{ getTimeRead }} min read
             </div>
             <div class="mr-2 cursor-pointer" @click="isShare">
               <font-awesome-icon :icon="['fas', 'share']" class="iconRemarks text-xl" />
@@ -39,15 +39,15 @@
         <div class="bg-white p-2 rounded my-2 flex flex-shrink-0 flex-wrap">
           <font-awesome-icon :icon="['fab', 'the-red-yeti']" class="w-12 h-12 rounded-full text-5xl my-2"/>
           <div class="mx-4">
-            <input type="text" placeholder="your name" class="px-2 py-2 placeholder-blueGray-300 text-black relative bg-white bg-white rounded text-sm border-2 shadow outline-none focus:outline-none focus:ring w-full" v-model="userComment.name"/>
-            <TipTap class="text-black" v-model="userComment.content"/>
+            <input type="text" placeholder="your name" class="px-2 py-2 placeholder-blueGray-300 text-blueGray-900 relative bg-white bg-white rounded text-sm border-2 shadow outline-none focus:outline-none focus:ring w-full" v-model="userComment.name"/>
+            <TipTap class="text-blueGray-500" v-model="userComment.content"/>
           </div>
         </div>
         <button @click="isComment" class="bg-pink-600 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150">
           Comment
         </button>
         <div v-if="comments.length > 0">
-          <div v-for="(comment, index) in comments" :key="index" class="comments border p-2 my-2">
+          <div v-for="(comment, index) in comments" :key="index" class="comments border p-2 my-2 rounded-3xl">
             <div class="flex flex-shrink-0">
               <font-awesome-icon :icon="['fab', 'the-red-yeti']" class="w-12 h-12 rounded-full text-5xl my-2"/>
               <div class="mx-2 p-2">
@@ -56,7 +56,7 @@
                   {{comment.name}}
                 </div>
                 <div class="">
-                  8 hrs Ago
+                  {{ getCommentedTime(comment.dateCreated) }} Ago
                 </div>
               </div>
             </div>
@@ -67,7 +67,7 @@
         </div>
       </div>
     </div>
-    <div v-if="allPosts" class="latestPosts bg-white text-gray-600 font-bold p-3 mx-3 max-w-md rounded-xl text-white my-2">
+    <div v-if="allPosts.length > 0" class="latestPosts bg-white text-gray-600 font-bold p-3 mx-3 max-w-md rounded-xl text-white my-2">
       <div class="font-extrabold text-xl mb-2">Lastest Posts</div>
       <div v-for="(post, index) in allPosts" :key="index" >
         <div @click="getPost(post._id)" v-if="post._id !== $route.params.id" class="p-2 rounded-xl cursor-pointer hover:bg-pink-600 hover:text-white">
@@ -77,15 +77,17 @@
             {{ post.author }}
           </div>
         </div>
-        <div v-else class="text-center">
-          <div class="text-3xl text-pink-600">No Latest Post</div>
-          <p class="my-2">
-            Create yours instantly,
-            <router-link to="/new-post" class="text-pink-600">
-              click here.
-            </router-link>
-          </p>
-        </div>
+      </div>
+    </div>
+    <div v-else class="latestPosts bg-white text-gray-600 font-bold p-3 mx-3 max-w-md rounded-xl text-white my-2">
+      <div v-if="allPosts.length === 0" class="text-center">
+        <div class="text-3xl text-pink-600">No Latest Post</div>
+        <p class="my-2">
+          Create yours instantly,
+          <router-link to="/new-post" class="text-pink-600">
+            click here.
+          </router-link>
+        </p>
       </div>
     </div>
     <div v-if="share" class="m-3 overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
@@ -184,6 +186,7 @@
 import axios from 'axios'
 import { mapState } from 'vuex'
 import TipTap from '@/components/TipTap'
+import { formatDistanceToNow } from 'date-fns'
 
 export default {
   name: 'PublishedContent',
@@ -204,10 +207,31 @@ export default {
       }
     }
   },
+  watch: {
+    userComments () {
+      this.getComments()
+    }
+  },
   computed: {
     ...mapState([
       'baseURL'
-    ])
+    ]),
+    getDateCreated () {
+      const distance = formatDistanceToNow(
+        new Date(this.post.dateCreated),
+        {
+          includeSeconds: true
+        }
+      )
+      return distance
+    },
+    getTimeRead () {
+      let timeRead = Math.floor(this.post.content.length / 267)
+      if (timeRead === 0) {
+        timeRead = 1
+      }
+      return timeRead
+    }
   },
   async mounted () {
     const responseData = await axios.get(this.baseURL + '/blog-content/' + this.$route.params.id)
@@ -219,7 +243,7 @@ export default {
       })
     } else {
       this.post = responseData.data.results
-      const postsData = await axios.get(this.baseURL + '/all-posts/')
+      const postsData = await axios.get(this.baseURL + '/latest-posts/')
       this.allPosts = postsData.data.posts
     }
     this.getComments()
@@ -240,7 +264,7 @@ export default {
     },
     async isComment () {
       try {
-        const { message } = await axios.post(
+        const responseData = await axios.post(
           `${this.baseURL}/post-comments`,
           {
             postID: this.post._id,
@@ -248,7 +272,7 @@ export default {
             content: this.userComment.content
           }
         )
-        if (message) {
+        if (responseData.data.message) {
           this.getComments()
         }
         this.userComment = {
@@ -275,6 +299,15 @@ export default {
           id
         }
       })
+    },
+    getCommentedTime (time) {
+      const commentedTime = formatDistanceToNow(
+        new Date(time),
+        {
+          includeSeconds: true
+        }
+      )
+      return commentedTime
     }
   }
 }

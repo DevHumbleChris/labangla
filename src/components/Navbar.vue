@@ -13,34 +13,10 @@
       <div v-bind:class="{'hidden': !showMenu, 'flex': showMenu}" class="lg:flex lg:flex-grow items-center">
         <ul class="flex flex-col lg:flex-row list-none ml-auto">
           <li class="nav-item">
-            <router-link to="/about" class="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75" href="#pablo">
-              <font-awesome-icon :icon="['fas', 'info']" class="fab fa-facebook-square text-lg leading-lg text-white opacity-75" />
-              <span class="ml-2">About</span>
+            <router-link to="/feeds" class="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75">
+              <font-awesome-icon :icon="['fas', 'book']" class="fab fa-facebook-square text-lg leading-lg text-white opacity-75" />
+              <span class="ml-2">Feeds</span>
             </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/author" class="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75" href="#pablo">
-              <font-awesome-icon :icon="['fas', 'user-astronaut']" class="fab fa-facebook-square text-lg leading-lg text-white opacity-75" />
-              <span class="ml-2">Author</span>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <a class="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75" href="#pablo">
-              <font-awesome-icon :icon="['fab', 'twitter']" class="fab fa-facebook-square text-lg leading-lg text-white opacity-75" />
-              <span class="ml-2">Twitter</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75" href="#pablo">
-              <font-awesome-icon :icon="['fab', 'linkedin']" class="fab fa-facebook-square text-lg leading-lg text-white opacity-75" />
-              <span class="ml-2">Linkedin</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75" href="#pablo">
-              <font-awesome-icon :icon="['fab', 'instagram']" class="fab fa-facebook-square text-lg leading-lg text-white opacity-75" />
-              <span class="ml-2">Instagram</span>
-            </a>
           </li>
           <li class="nav-item">
             <router-link to="/new-post" class="px-3 py-2 flex items-center text-xs uppercase font-bold bg-blue-600 rounded leading-snug text-white hover:opacity-75">

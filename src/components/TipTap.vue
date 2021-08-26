@@ -52,17 +52,26 @@
           </form>
         </div>
         <div class="menuBtn mr-2">
-          <button>
+          <button
+            @click="editor.chain().focus().setTextAlign('left').run()"
+            :class="{'is-active': editor.isActive({ textAlign: 'left' })}"
+          >
             <font-awesome-icon :icon="['fas', 'align-left']" class="iconBtn"/>
           </button>
         </div>
         <div class="menuBtn mr-2">
-          <button>
+          <button
+          @click="editor.chain().focus().setTextAlign('center').run()"
+          :class="{'is-active': editor.isActive({ textAlign: 'center' })}"
+          >
             <font-awesome-icon :icon="['fas', 'align-center']" class="iconBtn"/>
           </button>
         </div>
         <div class="menuBtn mr-2">
-          <button>
+          <button
+            @click="editor.chain().focus().setTextAlign('right').run()"
+            :class="{'is-active': editor.isActive({ textAlign: 'right' })}"
+          >
             <font-awesome-icon :icon="['fas', 'align-right']" class="iconBtn"/>
           </button>
         </div>
@@ -84,6 +93,8 @@ import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
 import Image from '@tiptap/extension-image'
 import Dropcursor from '@tiptap/extension-dropcursor'
+import Heading from '@tiptap/extension-heading'
+import TextAlign from '@tiptap/extension-text-align'
 import { mapState, mapMutations } from 'vuex'
 
 export default {
@@ -132,7 +143,11 @@ export default {
         Paragraph,
         Text,
         Image,
-        Dropcursor
+        Dropcursor,
+        Heading,
+        TextAlign.configure({
+          types: ['heading', 'paragraph']
+        })
       ],
       content: this.value,
       onUpdate: () => {

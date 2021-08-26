@@ -38,7 +38,7 @@
         class="text-center my-3 uppercase font-extrabold text-pink-900"
         data-aos="zoom-in"
         data-aos-duration="2500"
-        dat-aos-delay="50"
+        dat-aos-delay="300"
       >
         Why you should be using Labangla.
       </h2>
@@ -49,7 +49,7 @@
           class="max-w-md my-28 mx-2 -dec-margin-top"
           data-aos="fade-right"
           data-aos-duration="2500"
-          dat-aos-delay="55"
+          dat-aos-delay="300"
         >
           <h3 class="text-pink-600 font-bold text-2xl my-2">Made for the community.</h3>
           <div class="font-medium text-lg">
@@ -62,7 +62,7 @@
           class="max-w-md"
           data-aos="fade-left"
           data-aos-duration="2500"
-          dat-aos-delay="55"
+          dat-aos-delay="300"
         />
       </div>
       <div class="flex justify-center flex-wrap reverse-flex">
@@ -72,13 +72,13 @@
           class="max-w-md"
           data-aos="fade-right"
           data-aos-duration="2500"
-          dat-aos-delay="55"
+          dat-aos-delay="300"
         />
         <div
           class="max-w-md my-28 mx-2 -dec-margin-top"
           data-aos="fade-left"
           data-aos-duration="2500"
-          dat-aos-delay="55"
+          dat-aos-delay="300"
         >
           <h3 class="text-pink-600 font-bold text-2xl my-2">Minimal Setup.</h3>
           <div class="font-medium text-lg">
@@ -91,7 +91,7 @@
           class="max-w-md my-28 mx-2 -dec-margin-top"
           data-aos="fade-right"
           data-aos-duration="2500"
-          dat-aos-delay="55"
+          dat-aos-delay="300"
         >
           <h3 class="text-pink-600 font-bold text-2xl my-2">No passwords required.</h3>
           <div class="font-medium text-lg">
@@ -105,7 +105,7 @@
           class="max-w-md"
           data-aos="fade-left"
           data-aos-duration="2500"
-          dat-aos-delay="55"
+          dat-aos-delay="300"
         />
       </div>
       <div class="flex justify-center flex-wrap reverse-flex">
@@ -115,13 +115,13 @@
           class="max-w-md"
           data-aos="fade-right"
           data-aos-duration="2500"
-          dat-aos-delay="55"
+          dat-aos-delay="300"
         />
         <div
           class="max-w-md my-28 mx-2 -dec-margin-top"
           data-aos="fade-left"
           data-aos-duration="2500"
-          dat-aos-delay="55"
+          dat-aos-delay="300"
         >
           <h3 class="text-pink-600 font-bold text-2xl my-2">Engaging.</h3>
           <div class="font-medium text-lg">

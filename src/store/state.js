@@ -2,7 +2,7 @@ const content = localStorage.getItem('editContent')
 let editContent
 const showModal = false
 const save = false
-const baseURL = 'http://localhost:3000'
+const baseURL = 'https://labangla-api.herokuapp.com'
 // https://labangla-api.herokuapp.com
 
 if (content) {

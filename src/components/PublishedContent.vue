@@ -280,7 +280,7 @@ export default {
           name: ''
         }
       } catch (err) {
-        console.log(err.message)
+        alert(err.message)
       }
     },
     async getComments () {
